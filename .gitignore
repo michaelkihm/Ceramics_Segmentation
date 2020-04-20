@@ -1,0 +1,11 @@
+
+#directories to ignore
+.vscode/**
+__pycache__/**
+
+
+#files to ignore
+*.png
+
+#directories not to be ignored
+!imgs/**
