@@ -2,7 +2,7 @@ name: Ceramic_Segmentation
 
 dependencies:
   - python=3.7
-  - tensorflow
+  - tensorflow_gpu
   - jupyter
   - numpy
   - matplotlib
