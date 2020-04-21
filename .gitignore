@@ -2,10 +2,12 @@
 #directories to ignore
 .vscode/**
 __pycache__/**
+Ceramic_dataset/**
 
 
 #files to ignore
 *.png
+*.h5
 
 #directories not to be ignored
 !imgs/**
