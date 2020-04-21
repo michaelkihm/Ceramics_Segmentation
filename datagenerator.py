@@ -101,7 +101,9 @@ class DataGenerator(tf.keras.utils.Sequence):
         """
         @brief reads and resizes an image
         """
-        return cv.resize(cv.cvtColor(cv.imread(file_name, cv.IMREAD_COLOR),cv.COLOR_BGR2RGB), self._image_size)
+        #return cv.resize(cv.cvtColor(cv.imread(file_name, cv.IMREAD_COLOR),cv.COLOR_BGR2RGB), self._image_size)
+        img = cv.resize(cv.imread(file_name, cv.IMREAD_GRAYSCALE), self._image_size)
+        return img[:,:,np.newaxis]
 
 
 
