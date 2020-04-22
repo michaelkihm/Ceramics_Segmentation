@@ -16,11 +16,13 @@ class DataGenerator(tf.keras.utils.Sequence):
     @param classes number of classes 
     @image_size each image and each mask will be scaled to the given size
     @batch_size batch size
-    @shuffle shuffle data or not
-    @file_types tuple of excepted file types
+    @param shuffle shuffle data or not
+    @param file_types tuple of excepted file types
+    @param scale image intenseties
+    @param read_grayscale read images as one channel grayscale image with output shape (batchsize, row, cols, 1)
     """
 
-    def __init__(self, image_path:str,mask_path:str, classes:int = 2, image_size:Tuple=(200, 200), batch_size:int=128, shuffle:bool=True, file_types:tuple=('jpg', 'png')):
+    def __init__(self, image_path:str,mask_path:str, classes:int = 2, image_size:Tuple=(200, 200), batch_size:int=128, shuffle:bool=True, file_types:tuple=('jpg', 'png'), scale:int=0, read_grayscale:bool=False):
         self._image_path = image_path
         self._mask_path = mask_path
         self._image_size = image_size
@@ -28,6 +30,8 @@ class DataGenerator(tf.keras.utils.Sequence):
         self._shuffle = shuffle
         self._file_types = file_types
         self._classes = classes
+        self._scale = scale
+        self._read_grayscale = read_grayscale
 
         self._images, self._masks = self._create_dataset()
        
@@ -67,7 +71,10 @@ class DataGenerator(tf.keras.utils.Sequence):
 
         assert len(images) == len(masks), "size of image batch doesnt match size of mask list"
         
-        return np.array(images).astype(np.int), np.array(masks)
+        if self._scale == 0:
+            return np.array(images).astype(np.int), np.array(masks)
+        else:
+            return np.array(images).astype(np.float)/self._scale, np.array(masks) 
 
 
     def _create_dataset(self) ->List:
@@ -101,9 +108,11 @@ class DataGenerator(tf.keras.utils.Sequence):
         """
         @brief reads and resizes an image
         """
-        return cv.resize(cv.cvtColor(cv.imread(file_name, cv.IMREAD_COLOR),cv.COLOR_BGR2RGB), self._image_size)
-        #img = cv.resize(cv.imread(file_name, cv.IMREAD_GRAYSCALE), self._image_size)
-        #return img[:,:,np.newaxis]
+        if self._read_grayscale:
+            img = cv.resize(cv.imread(file_name, cv.IMREAD_GRAYSCALE), self._image_size)
+            return img[:,:,np.newaxis]
+        else:
+            return cv.resize(cv.cvtColor(cv.imread(file_name, cv.IMREAD_COLOR),cv.COLOR_BGR2RGB), self._image_size)
 
 
 
