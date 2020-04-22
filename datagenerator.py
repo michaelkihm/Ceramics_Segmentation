@@ -67,7 +67,7 @@ class DataGenerator(tf.keras.utils.Sequence):
 
         assert len(images) == len(masks), "size of image batch doesnt match size of mask list"
         
-        return np.array(images).astype(np.float)/255.0, np.array(masks)
+        return np.array(images).astype(np.int), np.array(masks)
 
 
     def _create_dataset(self) ->List:
@@ -101,9 +101,9 @@ class DataGenerator(tf.keras.utils.Sequence):
         """
         @brief reads and resizes an image
         """
-        #return cv.resize(cv.cvtColor(cv.imread(file_name, cv.IMREAD_COLOR),cv.COLOR_BGR2RGB), self._image_size)
-        img = cv.resize(cv.imread(file_name, cv.IMREAD_GRAYSCALE), self._image_size)
-        return img[:,:,np.newaxis]
+        return cv.resize(cv.cvtColor(cv.imread(file_name, cv.IMREAD_COLOR),cv.COLOR_BGR2RGB), self._image_size)
+        #img = cv.resize(cv.imread(file_name, cv.IMREAD_GRAYSCALE), self._image_size)
+        #return img[:,:,np.newaxis]
 
 
 
